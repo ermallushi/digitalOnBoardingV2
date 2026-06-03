@@ -15,7 +15,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 var vendorResponses = new ConcurrentQueue<VendorResponseSubmission>();
-var submissionCounter = 0;
 
 app.MapGet("/api/rfi", () => Results.Ok(RfiDocument.CreateDefault()))
     .WithName("GetRfiDocument");
@@ -36,7 +35,7 @@ app.MapPost("/api/rfi/vendor-responses", (VendorResponseRequest request) =>
     }
 
     var submission = new VendorResponseSubmission(
-        Interlocked.Increment(ref submissionCounter),
+        Guid.NewGuid(),
         request.VendorName.Trim(),
         request.ContactEmail.Trim(),
         request.Capabilities,
@@ -175,7 +174,7 @@ public record IntegrationRequirements(
     IReadOnlyList<string> ScalabilityAndPerformance);
 
 public record VendorResponseSubmission(
-    int Id,
+    Guid Id,
     string VendorName,
     string ContactEmail,
     IReadOnlyList<string> Capabilities,

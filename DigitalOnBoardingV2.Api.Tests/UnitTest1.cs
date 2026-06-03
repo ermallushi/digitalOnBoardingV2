@@ -60,6 +60,7 @@ public class RfiApiTests : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.NotNull(created);
+        Assert.NotEqual(Guid.Empty, created.Id);
         Assert.Equal(payload.vendorName, created.VendorName);
         Assert.Contains("AML", created.ComplianceFrameworks);
     }
@@ -72,7 +73,7 @@ public class RfiApiTests : IClassFixture<WebApplicationFactory<Program>>
         IReadOnlyList<string> DigitalSignatureCapabilities);
 
     private sealed record VendorSubmissionResponse(
-        int Id,
+        Guid Id,
         string VendorName,
         IReadOnlyList<string> ComplianceFrameworks);
 }
