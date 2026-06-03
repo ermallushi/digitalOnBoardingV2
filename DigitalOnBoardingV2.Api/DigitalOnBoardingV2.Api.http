@@ -1,0 +1,113 @@
+@DigitalOnBoardingV2.Api_HostAddress = http://localhost:5118
+
+### 1. Start digital onboarding session
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/onboarding/sessions
+Content-Type: application/json
+
+{
+  "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "fullName": "Alice Smith",
+  "email": "alice@example.com",
+  "channel": 0
+}
+
+###
+
+### 2. Submit identity document (replace {id} with session ID from step 1)
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/onboarding/sessions/{id}/document
+Content-Type: application/json
+
+{
+  "documentType": 0,
+  "documentNumber": "P1234567",
+  "issuingCountry": "AL",
+  "expiryDate": "2030-01-01",
+  "documentImageBase64": "BASE64_ENCODED_DOCUMENT_IMAGE"
+}
+
+###
+
+### 3. Submit biometric (selfie + liveness)
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/onboarding/sessions/{id}/biometric
+Content-Type: application/json
+
+{
+  "selfieImageBase64": "BASE64_ENCODED_SELFIE_IMAGE",
+  "fingerprintProvided": false
+}
+
+###
+
+### 4. Get session status and full result
+GET {{DigitalOnBoardingV2.Api_HostAddress}}/api/onboarding/sessions/{id}
+Accept: application/json
+
+###
+
+### 5. Start in-store KYC session (staff-initiated)
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/instore/sessions
+Content-Type: application/json
+
+{
+  "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afb7",
+  "fullName": "Bob Jones",
+  "email": "bob@example.com",
+  "staffId": "STAFF001",
+  "locationCode": "TIR-01"
+}
+
+###
+
+### 6. In-store scan: document + selfie in one call
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/instore/sessions/{id}/scan
+Content-Type: application/json
+
+{
+  "documentType": 2,
+  "documentNumber": "N1234567",
+  "issuingCountry": "AL",
+  "expiryDate": "2030-06-01",
+  "documentImageBase64": "BASE64_ENCODED_DOCUMENT_IMAGE",
+  "selfieImageBase64": "BASE64_ENCODED_SELFIE_IMAGE"
+}
+
+###
+
+### 7. Create a digital signature request (requires an approved session)
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/signatures
+Content-Type: application/json
+
+{
+  "sessionId": "SESSION_ID_FROM_STEP_1",
+  "documentName": "Customer Agreement",
+  "documentContent": "This agreement is between One Albania and the customer.",
+  "level": 1,
+  "signatories": ["alice@example.com", "officer@onealb.com"],
+  "expiryDays": 7
+}
+
+###
+
+### 8. Sign the document (repeat with each signatory)
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/signatures/{id}/sign
+Content-Type: application/json
+
+{
+  "signatory": "alice@example.com",
+  "documentContent": "This agreement is between One Albania and the customer."
+}
+
+###
+
+### 9. Validate completed signature
+GET {{DigitalOnBoardingV2.Api_HostAddress}}/api/signatures/{id}/validate
+Accept: application/json
+
+###
+
+### 10. Get audit trail for a session
+GET {{DigitalOnBoardingV2.Api_HostAddress}}/api/audit/{sessionId}
+Accept: application/json
+
+###
+
