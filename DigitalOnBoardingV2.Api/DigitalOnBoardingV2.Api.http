@@ -1,0 +1,6 @@
+@DigitalOnBoardingV2.Api_HostAddress = http://localhost:5118
+
+GET {{DigitalOnBoardingV2.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
