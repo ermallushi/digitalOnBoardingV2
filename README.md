@@ -11,11 +11,11 @@ A minimal .NET Web API for managing One Albania KYC RFI requirements across digi
 ## Run
 
 ```bash
-dotnet run --project /tmp/workspace/ermallushi/digitalOnBoardingV2/DigitalOnBoardingV2.Api/DigitalOnBoardingV2.Api.csproj
+dotnet run --project DigitalOnBoardingV2.Api/DigitalOnBoardingV2.Api.csproj
 ```
 
 ## Test
 
 ```bash
-dotnet test /tmp/workspace/ermallushi/digitalOnBoardingV2/DigitalOnBoardingV2.slnx
+dotnet test DigitalOnBoardingV2.slnx
 ```

@@ -28,8 +28,7 @@ app.MapPost("/api/rfi/vendor-responses", (VendorResponseRequest request) =>
     var validationContext = new ValidationContext(request);
     var validationResults = new List<ValidationResult>();
 
-    if (!Validator.TryValidateObject(request, validationContext, validationResults, validateAllProperties: true) ||
-        request.Capabilities.Count == 0)
+    if (!Validator.TryValidateObject(request, validationContext, validationResults, validateAllProperties: true))
     {
         return Results.ValidationProblem(validationResults
             .GroupBy(x => x.MemberNames.FirstOrDefault() ?? "request")
