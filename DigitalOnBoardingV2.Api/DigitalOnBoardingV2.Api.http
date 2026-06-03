@@ -1,6 +1,19 @@
 @DigitalOnBoardingV2.Api_HostAddress = http://localhost:5118
 
-GET {{DigitalOnBoardingV2.Api_HostAddress}}/weatherforecast/
+GET {{DigitalOnBoardingV2.Api_HostAddress}}/api/rfi
 Accept: application/json
+
+###
+
+POST {{DigitalOnBoardingV2.Api_HostAddress}}/api/rfi/vendor-responses
+Content-Type: application/json
+
+{
+  "vendorName": "Sample Vendor",
+  "contactEmail": "vendor@example.com",
+  "capabilities": ["OCR and NFC", "Biometric verification"],
+  "complianceFrameworks": ["GDPR", "AML", "eIDAS"],
+  "notes": "Supports in-store and digital channel onboarding."
+}
 
 ###

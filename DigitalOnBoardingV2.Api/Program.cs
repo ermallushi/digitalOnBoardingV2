@@ -1,5 +1,5 @@
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +14,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var vendorResponses = new List<VendorResponseSubmission>();
+var vendorResponses = new ConcurrentQueue<VendorResponseSubmission>();
 var submissionCounter = 0;
 
 app.MapGet("/api/rfi", () => Results.Ok(RfiDocument.CreateDefault()))
     .WithName("GetRfiDocument");
 
-app.MapGet("/api/rfi/vendor-responses", () => Results.Ok(vendorResponses))
+app.MapGet("/api/rfi/vendor-responses", () => Results.Ok(vendorResponses.ToArray()))
     .WithName("GetVendorResponses");
 
 app.MapPost("/api/rfi/vendor-responses", (VendorResponseRequest request) =>
@@ -45,7 +45,7 @@ app.MapPost("/api/rfi/vendor-responses", (VendorResponseRequest request) =>
         request.Notes,
         DateTimeOffset.UtcNow);
 
-    vendorResponses.Add(submission);
+    vendorResponses.Enqueue(submission);
 
     return Results.Created($"/api/rfi/vendor-responses/{submission.Id}", submission);
 })
